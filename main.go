@@ -4,16 +4,12 @@ import (
 	"log"
 	"os/user"
 	"path"
-	"sync"
 	"time"
 
 	"github.com/akiokio/pubg-archive/copydir"
 )
 
-var wg sync.WaitGroup
-
 func main() {
-	wg.Add(1)
 	currentUser, err := user.Current()
 	if err != nil {
 		log.Println(err)
@@ -23,12 +19,8 @@ func main() {
 	}
 	source := path.Join(currentUser.HomeDir, "\\AppData\\Local\\TslGame\\Saved\\Demos")
 	dest := path.Join(currentUser.HomeDir, "\\Desktop\\PUBG - Matches - all")
-	go func() {
-		err = copydir.CopyDir(source, dest)
-		wg.Done()
-	}()
+	err = copydir.CopyDir(source, dest)
 
-	wg.Wait()
 	if err != nil {
 		log.Fatalln(err)
 	} else {
