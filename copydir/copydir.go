@@ -50,9 +50,11 @@ func CopyDir(source, destination string) error {
 			}
 			continue
 		} else {
-			go func() {
-				copyfile.CopyFile(sourceFilePath, destinationFilePath)
-			}()
+			err := copyfile.CopyFile(sourceFilePath, destinationFilePath)
+
+			if err != nil {
+				return err
+			}
 		}
 	}
 
